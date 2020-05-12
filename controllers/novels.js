@@ -8,6 +8,18 @@ const getAllNovelsWithAuthorAndGenre = async (request, response) => {
         { model: models.Genres }]
     })
 
+    allNovels.forEach(novel => novel.genres.sort((lhs, rhs) => {
+      if (lhs.name < rhs.name) {
+        return -1
+      }
+      else if (lhs.name > rhs.name) {
+        return 1
+      }
+      else {
+        return 0
+      }
+    }))
+
     return (allNovels)
       ? response.send(allNovels)
       : response.sendStatus(404)
