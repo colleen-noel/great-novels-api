@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const models = require('../models')
 
 const getAllAuthors = async (request, response) => {
@@ -13,43 +14,41 @@ const getAllAuthors = async (request, response) => {
 }
 
 
-const getAuthorByIdWithNovelAndGenre = async (request, response) => {
+const getAuthorByIdIdentifierNovelAndGenre = async (request, response) => {
   try {
-    const { id } = request.params
+    const { identifier } = request.params
 
-    const authorById = await models.Authors.findOne({
-      where: { Id: id },
+    const authorByIdentifier = await models.Authors.findOne({
+      attributes: ['id', 'firstName', 'lastName', 'createdAt', 'updatedAt'],
+      where: {
+        [models.Op.or]: [
+          { Id: { [models.Op.like]: `%${identifier}%` } },
+          { lastName: { [models.Op.like]: `%${identifier}%` } }
+        ]
+      },
+
       include: [{
         model: models.Novels,
-        include: [{ model: models.Genres }],
+        attributes: ['id', 'title', 'authorId', 'createdAt', 'updatedAt'],
+        include: [{
+          model: models.Genres,
+          attributes: ['id', 'name', 'createdAt', 'updatedAt'],
+          order: [['name', 'DESC']],
+        }],
       }],
     })
 
-    authorById.novels.forEach(novel => novel.genres.sort((lhs, rhs) => {
-      if (lhs.name < rhs.name) {
-        return -1
-      }
-      else if (lhs.name > rhs.name) {
-        return 1
-      }
-      else {
-        return 0
-      }
-    }))
-
-
-
-    return authorById
-      ? response.send(authorById)
+    return authorByIdentifier
+      ? response.send(authorByIdentifier)
       : response.sendStatus(404)
   } catch (error) {
+    console.log('error:', error)
+
     return response.status(500).send('Unable to retrieve author, please try again')
   }
 }
 
-
-
-module.exports = { getAllAuthors, getAuthorByIdWithNovelAndGenre }
+module.exports = { getAllAuthors, getAuthorByIdIdentifierNovelAndGenre }
 
 
 

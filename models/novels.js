@@ -1,7 +1,7 @@
 const novels = (connection, Sequelize, Authors) => {
   return connection.define('novels', {
-    Id: { type: Sequelize.INTEGER, autoincrement: true, primaryKey: true },
-    Title: { type: Sequelize.STRING },
+    id: { type: Sequelize.INTEGER, autoincrement: true, primaryKey: true },
+    title: { type: Sequelize.STRING },
     authorId: { type: Sequelize.INTEGER, references: { model: Authors, key: 'Id' } }
   }, {
     defaultScope: {

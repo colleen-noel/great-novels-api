@@ -28,11 +28,21 @@ const getAllNovelsWithAuthorAndGenre = async (request, response) => {
   }
 }
 
+const getNovelbySlugType = (request, response) => {
+  const { slug } = request.params
 
-const getNovelByIdWithAuthorAndGenre = async (request, response) => {
+  const isNum = !isNaN(slug)
+
+  if (isNum) {
+    return getNovelByIdWithAuthorAndGenre(slug, response)
+  }
+  else {
+    return getNovelByTitleWithAuthorAndGenre(slug, response)
+  }
+}
+
+const getNovelByIdWithAuthorAndGenre = async (id, response) => {
   try {
-    const { id } = request.params
-
     const novel = await models.Novels.findOne({
       where: { Id: id },
       include: [
@@ -48,4 +58,33 @@ const getNovelByIdWithAuthorAndGenre = async (request, response) => {
   }
 }
 
-module.exports = { getAllNovelsWithAuthorAndGenre, getNovelByIdWithAuthorAndGenre }
+const getNovelByTitleWithAuthorAndGenre = async (title, response) => {
+  try {
+    const novelsTitle = await models.Novels.findOne({
+      attributes: ['id', 'title', 'authorId', 'createdAt', 'updatedAt'],
+      where: {
+        title: { [models.Op.like]: `%${title}%` },
+      },
+
+      include: [
+        {
+          model: models.Authors,
+          attributes: ['id', 'firstName', 'lastName', 'createdAt', 'updatedAt']
+        },
+        {
+          model: models.Genres,
+          attributes: ['id', 'name', 'createdAt', 'updatedAt']
+        },
+      ]
+    })
+
+
+    return novelsTitle
+      ? response.send(novelsTitle)
+      : response.status(404).send('nope')
+  } catch (error) {
+    response.status(500).send('Unable to retrieve novel, please try again')
+  }
+}
+
+module.exports = { getAllNovelsWithAuthorAndGenre, getNovelbySlugType }
