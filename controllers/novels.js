@@ -34,7 +34,7 @@ const getNovelbySlugType = (request, response) => {
   const isNum = !isNaN(slug)
 
   if (isNum) {
-    return getNovelByIdWithAuthorAndGenre(slug, response)
+    return getNovelByIdWithAuthorAndGenre(+slug, response)
   }
   else {
     return getNovelByTitleWithAuthorAndGenre(slug, response)

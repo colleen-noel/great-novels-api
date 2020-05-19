@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable quotes */
-/* eslint-disable max-len */
 module.exports = {
   up: async (queryInterface) => {
     /*
