@@ -81,7 +81,7 @@ const getNovelByTitleWithAuthorAndGenre = async (title, response) => {
 
     return novelsTitle
       ? response.send(novelsTitle)
-      : response.status(404).send('nope')
+      : response.sendStatus(404)
   } catch (error) {
     response.status(500).send('Unable to retrieve novel, please try again')
   }

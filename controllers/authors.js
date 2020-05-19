@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const models = require('../models')
 
 const getAllAuthors = async (request, response) => {
@@ -42,8 +41,6 @@ const getAuthorByIdIdentifierNovelAndGenre = async (request, response) => {
       ? response.send(authorByIdentifier)
       : response.sendStatus(404)
   } catch (error) {
-    console.log('error:', error)
-
     return response.status(500).send('Unable to retrieve author, please try again')
   }
 }
