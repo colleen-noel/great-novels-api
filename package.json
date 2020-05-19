@@ -1,12 +1,14 @@
 {
   "name": "great-novels-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "In the initial commit of this project you were provided with data on several novels including their author and genres. Working in a branch called `part-one-answer`, your tasks are:",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon index.js",
-    "lint": "./node_modules/.bin/eslint --format codeframe .",
-    "lint:fix": "./node_modules/.bin/eslint --fix --format codeframe ."
+    "dev": "./node_modules/.bin/env-cmd ./node_modules/.bin/nodemon index.js",
+    "dev:migrate": "./node_modules/.bin/env-cmd ./node_modules/.bin/sequelize db:migrate --env development --config ./config/sequelize.js",
+    "lint": "npm run lint: eslint",
+    "lint.eslint": "./node_module/.bin/eslint -- format codeframe.",
+    "lint.fix": "./node_module/.bin/eslint -fix -- format codeframe."
   },
   "repository": {
     "type": "git",
@@ -21,10 +23,12 @@
   "dependencies": {
     "express": "^4.17.1",
     "mysql2": "^2.1.0",
-    "sequelize": "^5.21.6"
+    "sequelize": "^5.21.8",
+    "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "eslint": "^6.8.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.3"
   }
 }
